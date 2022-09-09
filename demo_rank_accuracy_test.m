@@ -1,8 +1,7 @@
 % ------------------------------------------------------
 % Run this demo to test the accuracy of the rank estimation.
-% It randomly generate noise 100 times and tests VITTC for different settings
-% Under the rank pruning strategy adopted in this demo, you are supposed to
-% obtain similar results as in the reference paper.
+% It randomly generate noise 10 times and tests VITTC for different
+% settings.
 % ------------------------------------------------------
 % Reference
 % Xu, L., Cheng, L., Wong, N., & Wu, Y. C. (2020). Learning tensor train representation with automatic rank determination from incomplete noisy data. arXiv preprint arXiv:2010.06564.

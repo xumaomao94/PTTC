@@ -15,7 +15,7 @@ Includes functions for ket-folding and the improved ket-folding in the reference
 
 - f_vittc/
 
-Includes functions realizing the variational inference algorithms proposed in the reference for the probabilistic tensor train model.
+Includes functions realizing the variational inference algorithms proposed for the probabilistic tensor train model.
 
 - f_datageneration/
 

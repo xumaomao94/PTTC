@@ -27,16 +27,16 @@ function [A_completed,Gcore,Lambda,Tau,rse,rank_estimated,Power] = VITTC(A_raw,A
 %       Indicating tensor,
 %       -1 -> entry observed
 %       -0 -> not observed
-% initialmethod
+% initmethod (default: 'svdinit')
 %       -'svdinit'-> use Gaussian random variables to fill in empty entries
 %       -'randinit'-> all entries are initialized by Gaussian variables
-% num_of_iter
-%       Max iteration for the VI update
-% method_rank_prune
+% num_of_iter (default: 100)
+%       Max number of iterations for the VI update
+% method_rank_prune (default: 'powerBased')
 %       -'none' -> do not prune ranks during the inference
 %       -'lambdaBased' -> prune ranks according to lambda
 %       -'powerBased' -> (*recommended) prune ranks according to the TT core slice power, if average slice power/average core power < threshold, then discard a slice
-% thre_rank_prune
+% thre_rank_prune (default: 1e-3)
 %       -method_rank_prune='lambdaBased'
 %           Slices with average power thres-times larger than the minimum
 %           average slice power will be discarded,  slice power is obtained
@@ -45,10 +45,15 @@ function [A_completed,Gcore,Lambda,Tau,rse,rank_estimated,Power] = VITTC(A_raw,A
 %       -method_rank_prune='powerBased'
 %           Slices with (average power/average core power) less than thres will be discarded
 %           Recommended value: smaller than 1e-2, e.g., 1e-3, 1e-5
-% thre_stop
+% thre_stop (default: 1e-12)
 %       stop the iteration when relative square error between current recovered tensor and
 %       last update is smaller than thre_stop
-% optional: maxrank
+% show_info (default: false)
+%       -true
+%           print information during the algorithm
+%       -false
+%           not to print
+% maxrank (default: 64)
 %       max rank for the TT ranks
 % ------------------Output------------------
 % A_completed

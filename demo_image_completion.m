@@ -16,7 +16,7 @@ addpath(genpath('f_tensorfolding'));
 addpath(genpath('f_perfevaluate'));
 
 img_name = 'TestImages\missing_rate80_1.mat';
-IfNoiseOn = false; % set true to test the noisy case
+IfNoiseOn = true; % set true to test the noisy case
 if IfNoiseOn
     % Gaussian noise with mean 0 and variance 0.1
     save_name = 'experiment results\VITTC_N10MR80jellybeans.mat';
@@ -52,16 +52,14 @@ Y_ket = mat2tensor(Y_dup,M_separate,N_separate);
 O_ket = mat2tensor(O_dup,M_separate,N_separate);
 
 %% run VITTC
-% 1. We highly recommend to use 'method_rank_prune' as 'powerBased', so as to
-% enable automatic rank determination and run faster. The performance will
-% be similar with that in the published paper (according to our test, it would be 
-% a little better under noisy data, while a little worse under clean data).
-% 2. For the same setting as those in [1]&[2], please further set 'method_rank_prune' as 'none'
+tic
 [X_VITT_ket,Gcore,Lambda,Tau,~,rank_estimated] = VITTC(Y_ket,Y_ket,O_ket,...
-                                                        'initmethod', 'randinit',...
-                                                        'method_rank_prune','powerBased',...
-                                                        'show_info', true); 
-
+                                                        'initmethod','randinit',...
+                                                        'maxrank',64,...
+                                                        'num_of_iter',30,...
+                                                        'thre_stop',1e-6,...
+                                                        'show_info', true);
+toc
 %% from Ket-folding & Dup state back to an image
 X_VITT_dup = tensor2mat(X_VITT_ket,M_separate,N_separate);
 X_VITT = dup_clear(X_VITT_dup,basic_folding_block);
@@ -77,5 +75,5 @@ subplot(1,3,1); imshow(X./255);
 subplot(1,3,2); imshow(Y./255);
 subplot(1,3,3); imshow(X_VITT./255);
 
-save(save_name,'X_VITT','rse','psnr','ssim')
+% save(save_name,'X_VITT','rse','psnr','ssim')
 

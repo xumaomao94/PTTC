@@ -12,21 +12,29 @@ function [lambda,tau,Gcore] = VITTC_initialize_indpd(A_observed,Mask,initmethod,
     Mask_index = find(Mask~=0);
     if strcmp(initmethod,'svdinit')
         A_guess = A_observed.*Mask+(1-Mask).*normrnd(mean(A_observed(Mask_index)),std(A_observed(Mask_index)),Size_A);
+        Aremain_M = reshape(A_guess,Size_A(1),[]); % use A_observed + random guess as initialization
+        for i = 1:ndims_A-1
+            [U,S,V] = svd(Aremain_M,'econ');
+            R(i+1) = min(size(S,1),maxrank);
+            U = U*S.^(1/(ndims_A-i+1));
+            S = S.^((ndims_A-i)/(ndims_A-i+1));
+            Gcore.mean{i} = permute(reshape(U(:,1:R(i+1)),[R(i),Size_A(i),R(i+1)]),[1,3,2]);
+            Aremain_M = reshape(S(1:R(i+1),1:R(i+1))*V(:,1:R(i+1))',[R(i+1)*Size_A(i+1),prod(Size_A(i+1:end))/Size_A(i+1)]);
+        end
+        Gcore.mean{ndims_A} = reshape(Aremain_M,[R(ndims_A),R(ndims_A+1),Size_A(ndims_A)]);
     elseif strcmp(initmethod,'randinit')
         A_guess = normrnd(mean(A_observed(Mask_index)),std(A_observed(Mask_index)),Size_A);% normal random, with A_mean and A_var
+        Aremain_M = reshape(A_guess,Size_A(1),[]); % use A_observed + random guess as initialization
+        for i = 1:ndims_A-1
+            [U,S,V] = svd(Aremain_M,'econ');
+            R(i+1) = min(size(S,1),maxrank);
+            U = U*S.^(1/ndims_A);
+            S = S.^((ndims_A-1)/ndims_A);
+            Gcore.mean{i} = permute(reshape(U(:,1:R(i+1)),[R(i),Size_A(i),R(i+1)]),[1,3,2]);
+            Aremain_M = reshape(S(1:R(i+1),1:R(i+1))*V(:,1:R(i+1))',[R(i+1)*Size_A(i+1),prod(Size_A(i+1:end))/Size_A(i+1)]);
+        end
+        Gcore.mean{ndims_A} = reshape(Aremain_M,[R(ndims_A),R(ndims_A+1),Size_A(ndims_A)]);
     end
-    
-    Aremain_M = reshape(A_guess,Size_A(1),[]); % use A_observed + random guess as initialization
-    for i = 1:ndims_A-1
-        [U,S,V] = svd(Aremain_M,'econ');
-        R(i+1) = min(size(S,1),maxrank);
-        
-        U = U*S.^(1/ndims_A);
-        S = S.^((ndims_A-1)/ndims_A);
-        Gcore.mean{i} = permute(reshape(U(:,1:R(i+1)),[R(i),Size_A(i),R(i+1)]),[1,3,2]);
-        Aremain_M = reshape(S(1:R(i+1),1:R(i+1))*V(:,1:R(i+1))',[R(i+1)*Size_A(i+1),prod(Size_A(i+1:end))/Size_A(i+1)]);
-    end
-    Gcore.mean{ndims_A} = reshape(Aremain_M,[R(ndims_A),R(ndims_A+1),Size_A(ndims_A)]);
     
     % lambda
     lambda.a = 10^(-6);

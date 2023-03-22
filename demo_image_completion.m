@@ -16,7 +16,7 @@ addpath(genpath('f_tensorfolding'));
 addpath(genpath('f_perfevaluate'));
 
 img_name = 'TestImages\missing_rate80_1.mat';
-IfNoiseOn = true; % set true to test the noisy case
+IfNoiseOn = false; % set true to test the noisy case
 if IfNoiseOn
     % Gaussian noise with mean 0 and variance 0.1
     save_name = 'experiment results\VITTC_N10MR80jellybeans.mat';

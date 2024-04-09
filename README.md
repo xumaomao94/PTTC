@@ -38,3 +38,5 @@ A folder used for storing results.
 [1] Xu, L., Cheng, L., Wong, N., & Wu, Y. C. (2020). Learning tensor train representation with automatic rank determination from incomplete noisy data. arXiv preprint arXiv:2010.06564.
 
 [2] Xu, L., Cheng, L., Wong, N., & Wu, Y. C. (2021, December). Overfitting Avoidance in Tensor Train Factorization and Completion: Prior Analysis and Inference. In 2021 IEEE International Conference on Data Mining (ICDM) (pp. 1439-1444). IEEE.
+
+[3] Xu, L., Cheng, L., Wong, N., & Wu, Y. C. (2023). Tensor train factorization under noisy and incomplete data with automatic rank estimation. Pattern Recognition, 141, 109650.
